@@ -13,25 +13,12 @@ class User(BaseModel):
     _password = None
 
     def display_name(self):
-        if (not self.email and not self.first_name and not self.last_name):
+        if self.email == self.first_name == self.last_name is None:
             return ""
-        if (not self.first_name and not self.last_name and self.email):
+        if (self.first_name is None and self.last_name is None and self.email):
             return self.email
-        if (not self.last_name and self.first_name):
+        if (self.last_name is None and self.first_name):
             return self.first_name
-        if (not self.first_name and self.last_name):
+        if (self.first_name is None and self.last_name):
             return self.last_name
         return "{} {}".format(self.first_name, self.last_name)
-
-
-if __name__ == "__main__":
-    u = User()
-    print(u.display_name())
-    input()
-
-    u.email = "hbtn@holbertonschool.com"
-    print(u.display_name())
-    input()
-
-    u.last_name = "Dylan"
-    print(u.display_name())
