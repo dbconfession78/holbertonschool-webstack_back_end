@@ -13,6 +13,7 @@ class User(BaseModel):
     _password = None
 
     def display_name(self):
+        """ displays User attritbues as a string """
         if self.email == self.first_name == self.last_name is None:
             return ""
         if (self.first_name is None and self.last_name is None and self.email):
