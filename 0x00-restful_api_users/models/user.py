@@ -47,3 +47,10 @@ class User(BaseModel):
             b = bytes(pw.encode("utf-8"))
             m = hashlib.md5(b).hexdigest()
             self._password = m
+
+    def is_valid_password(self, pwd):
+        """ checks for valid password """
+        if pwd is None or type(pwd) is not str or self._password is None:
+            return False
+        return hashlib.md5(bytes(pwd.encode(
+            "utf8"))).hexdigest() == self._password

@@ -102,5 +102,14 @@ class ModelTests(unittest.TestCase):
         expect = hashlib.md5(bytes("my_password".encode("utf8"))).hexdigest()
         self.assertEqual(self.model.password, expect)
 
+    def test_is_valid_password(self):
+        """ test password validity checker """
+        pw = "my_password"
+        self.model.password = pw
+        hashed_pw = hashlib.md5(bytes("my_password".encode(
+            "utf8"))).hexdigest()
+        self.assertEqual(self.model.is_valid_password(pw), True)
+
+
 if __name__ == "__main__":
     unittest.main()
