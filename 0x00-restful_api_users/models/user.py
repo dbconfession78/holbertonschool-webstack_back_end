@@ -22,4 +22,4 @@ class User(BaseModel):
             return self.first_name
         if self.last_name and self.first_name is None:
             return self.last_name
-        return "{} {}".format(self.first_name, self.last_name)
+        return self.first_name + ' ' + self.last_name
