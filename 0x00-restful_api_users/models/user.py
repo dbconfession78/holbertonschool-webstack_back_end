@@ -16,10 +16,10 @@ class User(BaseModel):
         """ displays User attritbues as a string """
         if self.email == self.first_name == self.last_name is None:
             return ""
-        if (self.first_name is None and self.last_name is None and self.email):
+        if self.email and (self.first_name == self.last_name is None):
             return self.email
-        if (self.last_name is None and self.first_name):
+        if self.first_name and self.last_name is None:
             return self.first_name
-        if (self.first_name is None and self.last_name):
+        if self.last_name and self.first_name is None:
             return self.last_name
         return "{} {}".format(self.first_name, self.last_name)

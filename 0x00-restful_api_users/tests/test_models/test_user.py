@@ -2,6 +2,7 @@
 """
 Module: contains tests for the User class
 """
+from datetime import datetime
 import inspect
 from models.base_model import BaseModel
 from models.user import User
@@ -36,6 +37,22 @@ class ModelTests(unittest.TestCase):
         """ test User """
         self.assertIsNotNone(self.cls)
         self.assertIsInstance(self.cls, BaseModel)
+
+    def test_id(self):
+        """ test id """
+        self.assertIsNotNone(self.cls.id)
+        self.assertIsInstance(self.cls.id, str)
+
+    def test_created_at(self):
+        """ test created_at """
+        self.assertIsNotNone(self.cls.created_at)
+        self.assertIsInstance(self.cls.created_at, datetime)
+
+    def test_updated_at(self):
+        """ test created_at """
+        self.assertIsNotNone(self.cls.created_at)
+        self.assertIsInstance(self.cls.updated_at, datetime)
+        self.assertEqual(self.cls.created_at, self.cls.updated_at)
 
     def test_display_name(self):
         """ test display_name() """
