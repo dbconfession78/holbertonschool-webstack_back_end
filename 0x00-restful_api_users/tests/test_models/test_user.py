@@ -106,9 +106,8 @@ class ModelTests(unittest.TestCase):
         """ test password validity checker """
         pw = "my_password"
         self.model.password = pw
-        hashed_pw = hashlib.md5(bytes("my_password".encode(
-            "utf8"))).hexdigest()
         self.assertEqual(self.model.is_valid_password(pw), True)
+        self.assertEqual(self.model.is_valid_password("my_passw0rd"), False)
 
 
 if __name__ == "__main__":
