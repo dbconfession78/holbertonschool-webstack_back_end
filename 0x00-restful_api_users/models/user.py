@@ -27,7 +27,7 @@ class User(BaseModel):
     def __str__(self):
         """ displays the User object as a string """
         return "[{}] {} - {} - {}".format(
-            type(self).__name__,
-            str(self.id),
+            self.__class__.__name__,
+            self.id,
             self.email,
             self.display_name())

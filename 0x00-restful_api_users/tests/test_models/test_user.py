@@ -64,11 +64,36 @@ class ModelTests(unittest.TestCase):
         self.model.last_name = "Dylan"
         self.assertEqual(self.model.display_name(), "Bob Dylan")
 
-    def test_str(self):
+    def test_str_email(self):
+        """ test with valid email """
         self.model.email = "hbtn@holbertonschool.com"
+        self.assertEqual(self.model.__str__(), "[User] " +
+                         self.model.id +
+                         " - hbtn@holbertonschool.com - " +
+                         "hbtn@holbertonschool.com")
+
+    def test_str_first_name(self):
+        """ test with first name only """
+        self.model.first_name = "Bob"
+        self.assertEqual(self.model.__str__(), "[User] " +
+                         self.model.id +
+                         " - None - Bob")
+
+    def test_str_last_name(self):
+        """ test with last name only """
+        self.model.last_name = "Dylan"
+        self.assertEqual(self.model.__str__(), "[User] " +
+                         self.model.id +
+                         " - None - Dylan")
+
+    def test_str_format(self):
+        """ test with first and last name, and email """
         self.model.first_name = "Bob"
         self.model.last_name = "Dylan"
-        self.assertEqual("[{}] {} - {} - {}".format(type(self.model).__name__, self.model.id, self.model.email, self.model.display_name()), "[User] {} - hbtn@holbertonschool.com - Bob Dylan".format(self.model.id))
+        self.model.email = "hbtn@holbertonschool.com"
+        self.assertEqual(self.model.__str__(), "[User] " +
+                         self.model.id +
+                         " - hbtn@holbertonschool.com - Bob Dylan")
 
 if __name__ == "__main__":
     unittest.main()
