@@ -3,6 +3,7 @@
 Module: contains User class definition
 """
 from models.base_model import BaseModel
+import hashlib
 
 
 class User(BaseModel):
@@ -31,3 +32,18 @@ class User(BaseModel):
             self.id,
             self.email,
             self.display_name())
+
+    @property
+    def password(self):
+        """ password getter """
+        return self._password
+
+    @password.setter
+    def password(self, pw):
+        """ password setter """
+        if pw is None or type(pw) is not str:
+            self._password = None
+        else:
+            b = bytes(pw.encode("utf-8"))
+            m = hashlib.md5(b).hexdigest()
+            self._password = m

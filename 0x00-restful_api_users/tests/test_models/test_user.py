@@ -3,6 +3,7 @@
 Module: contains tests for the User class
 """
 from datetime import datetime
+import hashlib
 import inspect
 from models.base_model import BaseModel
 from models.user import User
@@ -94,6 +95,12 @@ class ModelTests(unittest.TestCase):
         self.assertEqual(self.model.__str__(), "[User] " +
                          self.model.id +
                          " - hbtn@holbertonschool.com - Bob Dylan")
+
+    def test_password_set(self):
+        """ test password set and get """
+        self.model.password = "my_password"
+        expect = hashlib.md5(bytes("my_password".encode("utf8"))).hexdigest()
+        self.assertEqual(self.model.password, expect)
 
 if __name__ == "__main__":
     unittest.main()
