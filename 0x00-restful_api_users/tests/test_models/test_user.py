@@ -114,6 +114,19 @@ class ModelTests(unittest.TestCase):
         self.model.password = pw
         self.assertEqual(self.model.is_valid_password("my_passw0rd"), False)
 
+    def test_is_valid_password_none_param(self):
+        """ test None pwd """
+        pw = "my_password"
+        self.model.password = pw
+        self.assertEqual(self.model.is_valid_password(None), False)
+
+    def test_is_valid_password_none_self(self):
+        """ test None self._password """
+        pw = None
+        self.model.password = pw
+        self.assertEqual(self.model.is_valid_password("my_password"), False)
+
+
 
 if __name__ == "__main__":
     unittest.main()
