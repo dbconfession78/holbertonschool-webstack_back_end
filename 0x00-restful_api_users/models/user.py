@@ -1,8 +1,8 @@
 #!/usr/bin/python3
+"""
+Module: contains User class definition
+"""
 from models.base_model import BaseModel
-"""
-Module: contains user class definition
-"""
 
 
 class User(BaseModel):

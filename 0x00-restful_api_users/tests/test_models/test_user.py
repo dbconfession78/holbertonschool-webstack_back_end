@@ -2,18 +2,37 @@
 """
 Module: contains tests for the User class
 """
+import inspect
 from models.base_model import BaseModel
-import unittest
 from models.user import User
+from models import user
+import unittest
 
 
-class TestUser(unittest.TestCase):
+class ModelTests(unittest.TestCase):
     """ tests for the User  class """
     def setUp(self):
         """ setup tests """
         self.cls = User()
+        self.module = user
 
-    def test_user_model(self):
+    def test_module_doc(self):
+        """ test module has doc """
+        self.assertGreater(len(self.module.__doc__), 0)
+
+    def test_class_doc(self):
+        """ test class for doc """
+        self.assertGreater(len(self.cls.__doc__), 0)
+
+    def test_function_docs(self):
+        """ test class methods for doc """
+        attr_list = inspect.getmembers(self.cls)
+        for attr in attr_list:
+            attr_type = type(attr[1]).__name__
+            if type(attr_type) == "method":
+                self.assertGreater(len(attr[1].__doc__, 0))
+
+    def test_model(self):
         """ test User """
         self.assertIsNotNone(self.cls)
         self.assertIsInstance(self.cls, BaseModel)
