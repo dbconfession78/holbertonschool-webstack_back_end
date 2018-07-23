@@ -126,6 +126,19 @@ class ModelTests(unittest.TestCase):
         self.model.password = pw
         self.assertEqual(self.model.is_valid_password("my_password"), False)
 
+    def test_to_dict(self):
+        """ test to_dict class method """
+        str_format = "%Y-%m-%d %H:%M:%S"
+        expected = {"id": self.model.id,
+                    "email": "hbtn@holbertonschool.com",
+                    "first_name": "Bob",
+                    "last_name": "Dylan",
+                    "created_at": self.model.created_at.strftime(str_format),
+                    "updated_at": self.model.updated_at.strftime(str_format)}
+        self.model.first_name = "Bob"
+        self.model.last_name = "Dylan"
+        self.model.email = "hbtn@holbertonschool.com"
+        self.assertEqual(expected, self.model.to_dict())
 
 
 if __name__ == "__main__":
