@@ -45,10 +45,12 @@ class User(BaseModel, Base):
     @password.setter
     def password(self, pw):
         """ password setter """
-        secure = hashlib.md5()
-        secure.update(pw.encode("utf-8"))
-        secure_password = secure.hexdigest()
-        setattr(self, "_password", secure_password)
+        if pw is None or type(pw) is not str:
+            self._password = None
+        else:
+            b = bytes(pw.encode("utf-8"))
+            m = hashlib.md5(b).hexdigest()
+            self._password = m
 
     def is_valid_password(self, pwd):
         """ checks for valid password """
