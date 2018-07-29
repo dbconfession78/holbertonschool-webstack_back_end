@@ -2,18 +2,20 @@
 """
 Module: contains User class definition
 """
-from models.base_model import BaseModel
+from models.base_model import BaseModel, Base
 import hashlib
 import inspect
 from datetime import datetime
+from sqlalchemy import (Column, String)
 
 
-class User(BaseModel):
+class User(BaseModel, Base):
     """ User class definition """
-    email = None
-    first_name = None
-    last_name = None
-    _password = None
+    __tablename__ = "users"
+    email = Column(String(128), nullable=False)
+    _password = Column(String(128), nullable=False, name="password")
+    first_name = Column(String(128))
+    last_name = Column(String(128))
 
     def display_name(self):
         """ displays User attritbues as a string """
@@ -43,12 +45,10 @@ class User(BaseModel):
     @password.setter
     def password(self, pw):
         """ password setter """
-        if pw is None or type(pw) is not str:
-            self._password = None
-        else:
-            b = bytes(pw.encode("utf-8"))
-            m = hashlib.md5(b).hexdigest()
-            self._password = m
+        secure = hashlib.md5()
+        secure.update(pw.encode("utf-8"))
+        secure_password = secure.hexdigest()
+        setattr(self, "_password", secure_password)
 
     def is_valid_password(self, pwd):
         """ checks for valid password """
