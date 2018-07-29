@@ -51,14 +51,29 @@ class ModelTests(unittest.TestCase):
         self.assertEqual(self.model.created_at, self.model.updated_at)
 
     def test_display_name(self):
-        """ test display_name() """
-        self.assertEqual(self.model.display_name(), "")
-        self.model.email = "hbtn@holbertonschool.com"
-        self.assertEqual(self.model.display_name(), "hbtn@holbertonschool.com")
+        """ tests display_name() when first_name and last_name are not None """
         self.model.first_name = "Bob"
-        self.assertEqual(self.model.display_name(), "Bob")
         self.model.last_name = "Dylan"
         self.assertEqual(self.model.display_name(), "Bob Dylan")
+
+    def test_display_name_all_None(self):
+        """ tests display_name() when all attributes are None """
+        self.assertEqual(self.model.display_name(), "")
+
+    def test_display_name_first_last_None(self):
+        """ tests display_name() when first_name and last_name are None """
+        self.model.email = "hbtn@holbertonschool.com"
+        self.assertEqual(self.model.display_name(), "hbtn@holbertonschool.com")
+
+    def test_display_last_None(self):
+        """ tests display_name() when last name is None """
+        self.model.first_name = "Bob"
+        self.assertEqual(self.model.display_name(), "Bob")
+
+    def test_display_name_first_None(self):
+        """ tests display_name() when first_name is None """
+        self.model.last_name = "Dylan"
+        self.assertEqual(self.model.display_name(), "Dylan")
 
     def test_str_email(self):
         """ test with valid email """
