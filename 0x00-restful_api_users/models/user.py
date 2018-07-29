@@ -2,6 +2,7 @@
 """
 Module: contains User class definition
 """
+import models
 from models.base_model import BaseModel, Base
 import hashlib
 import inspect
@@ -63,7 +64,7 @@ class User(BaseModel, Base):
         """ returns a serializable representation of a User instance """
         retval = {}
         for k, v in self.__dict__.items():
-            if k != "_password":
+            if k.startswith("_") is False:
                 if type(v).__name__ == datetime.__name__:
                     retval[k] = v.strftime("%Y-%m-%d %H:%M:%S")
                 else:

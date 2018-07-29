@@ -7,7 +7,7 @@ import hashlib
 import inspect
 from models.base_model import BaseModel
 from models.user import User
-from models import user
+import models
 import unittest
 
 
@@ -16,11 +16,6 @@ class ModelTests(unittest.TestCase):
     def setUp(self):
         """ setup tests """
         self.model = User()
-        self.module = user
-
-    def test_module_doc(self):
-        """ test module has doc """
-        self.assertGreater(len(self.module.__doc__), 0)
 
     def test_class_doc(self):
         """ test class for doc """
