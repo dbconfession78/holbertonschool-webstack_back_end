@@ -14,5 +14,4 @@ class BasicCache(BaseCaching):
 
     def get(self, key):
         """Returns a key's value from parent dictionary, 'cache_data'"""
-
         return self.cache_data.get(key)
