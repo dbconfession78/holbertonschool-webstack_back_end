@@ -18,7 +18,8 @@ class LRUCache(BaseCaching):
         self.idx = 0
 
     def put(self, key, item):
-        """Stores a key/value pair to the parent 'cache_data' dictionary"""
+        """Updates cache with given key/value (kv) pair. If cache is at capacity,
+        least recently accessed kv pair is deleted."""
         if key and item:
             self.cache_data[key] = item
             self.access(key)
