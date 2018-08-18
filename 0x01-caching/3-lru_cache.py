@@ -20,7 +20,6 @@ class LRUCache(BaseCaching):
     def put(self, key, item):
         """Updates cache with given key/value (kv) pair. If cache is at capacity,
         least recently accessed kv pair is deleted."""
-        input("hi")
         if key and item:
             self.cache_data[key] = item
             self.access(key)
@@ -41,8 +40,8 @@ class LRUCache(BaseCaching):
 
     def access(self, key):
         """ Updates key's access order in two dictionaries """
-        curr_idx = self.dct1.pop(key) if self.dct1.get(key) else None
-        if curr_idx:
+        curr_idx = self.dct1.pop(key) if key in self.dct1 else None
+        if curr_idx != None:
             del self.dct2[curr_idx]
         self.dct1[key] = self.idx
         self.dct2[self.idx] = key
