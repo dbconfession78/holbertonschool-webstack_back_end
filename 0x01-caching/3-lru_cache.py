@@ -1,48 +1,41 @@
 #!/usr/bin/python3
 """
-3-lru_cache.py - contains class definition for LRUCache
+module containing LRUCache class
 """
-from base_caching import BaseCaching
+from collections import Counter
+
+BaseCaching = __import__('base_caching').BaseCaching
 
 
 class LRUCache(BaseCaching):
-    """
-    : Class definition for 'LRUCache'
-    : @dct1: key to access-index dictionary
-    : @dct2: access-index to key dictionary
-    """
+    """ lru caching system """
     def __init__(self):
+        """ initializing """
         super().__init__()
-        self.dct1 = {}
-        self.dct2 = {}
-        self.idx = 0
+        self.indexes = Counter()
 
     def put(self, key, item):
-        """Updates cache with given key/value (kv) pair. If cache is at capacity,
-        least recently accessed kv pair is deleted."""
-        if key and item:
+        """ add item to cache_data """
+        if key is not None and item is not None:
+            if self.cache_data.get(key) is None:
+                try:
+                    tmp = max(self.indexes, key=self.indexes.get)
+                    self.indexes[key] = self.indexes[tmp] + 1
+                except:
+                    self.indexes[key] = 0
+            else:
+                self.indexes[key] = self.indexes[max(self.indexes,
+                                                     key=self.indexes.get)] + 1
             self.cache_data[key] = item
-            self.access(key)
-            if len(self.cache_data) > BaseCaching.MAX_ITEMS:
-                key = min(list(self.dct2.keys()))
-                to_remove = self.dct2.get(key)
-                print("DISCARD: {}".format(to_remove))
-                del self.cache_data[to_remove]
-                del self.dct1[to_remove]
-                del self.dct2[key]
+        if len(self.indexes) > BaseCaching.MAX_ITEMS:
+            tmp = min(self.indexes, key=self.indexes.get)
+            print('DISCARD:', tmp)
+            self.cache_data.pop(tmp)
+            self.indexes.pop(tmp)
 
     def get(self, key):
-        """Returns a key's value from parent dictionary, 'cache_data'"""
-        val = self.cache_data.get(key)
-        if val:
-            self.access(key)
-        return val
-
-    def access(self, key):
-        """ Updates key's access order in two dictionaries """
-        curr_idx = self.dct1.pop(key) if self.dct1.get(key) else None
-        if curr_idx:
-            del self.dct2[curr_idx]
-        self.dct1[key] = self.idx
-        self.dct2[self.idx] = key
-        self.idx += 1
+        """ get item from cache_data """
+        if key is not None and self.indexes.get(key) is not None:
+            self.indexes[key] = self.indexes[max(self.indexes,
+                                             key=self.indexes.get)] + 1
+            return self.cache_data.get(key)
