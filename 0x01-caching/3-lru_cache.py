@@ -41,7 +41,7 @@ class LRUCache(BaseCaching):
     def access(self, key):
         """ Updates key's access order in two dictionaries """
         curr_idx = self.dct1.pop(key) if key in self.dct1 else None
-        if curr_idx != None:
+        if curr_idx is not None:
             del self.dct2[curr_idx]
         self.dct1[key] = self.idx
         self.dct2[self.idx] = key
