@@ -13,7 +13,7 @@ app.register_blueprint(app_views)
 @app.errorhandler(404)
 def page_not_found(e):
     """ Returns a json object indicating the page couldn't be found  """
-    return jsonify({"error": "not found"})
+    return jsonify({"error": "Not found"})
 
 @app.teardown_appcontext
 def close_db(error):

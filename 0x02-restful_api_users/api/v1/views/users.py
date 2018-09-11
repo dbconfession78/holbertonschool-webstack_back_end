@@ -1,7 +1,7 @@
 from api.v1.views import app_views
 from models import db_session
 from models.user import User
-from flask import jsonify
+from flask import (jsonify, abort)
 
 
 @app_views.route('/users')
@@ -19,7 +19,9 @@ def get_user(user_id):
     """ Gets dictionary representation of single user """
     user_dict = get_all_users()
     user = user_dict.get(user_id)
-    return jsonify(user.to_dict())
+    if user:
+        return jsonify(user.to_dict())
+    abort(404, 'Not found')
 
 
 def get_all_users():
