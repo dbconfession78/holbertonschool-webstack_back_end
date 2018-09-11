@@ -1,0 +1,7 @@
+#!/usr/bin/python3
+from api.v1.views import app_views
+
+@app_views.route(app_views.url_prefix + 'status')
+def get_status():
+    dictionary = {"status": "OK"}
+    return jsonify(dictionary)
