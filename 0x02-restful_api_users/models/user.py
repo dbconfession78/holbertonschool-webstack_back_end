@@ -12,11 +12,15 @@ from sqlalchemy import (Column, String)
 
 class User(BaseModel, Base):
     """ User class definition """
-    __tablename__ = "users"
+    __tablename__ = 'users'
     email = Column(String(128), nullable=False)
     _password = Column(String(128), nullable=False, name="password")
     first_name = Column(String(128))
     last_name = Column(String(128))
+
+    def __init__(self, *args, **kwargs):
+        """ instantiates user object """
+        super().__init__(*args, **kwargs)
 
     def display_name(self):
         """ displays User attritbues as a string """

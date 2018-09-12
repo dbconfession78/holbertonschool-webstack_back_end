@@ -5,13 +5,15 @@ from models import db_session
 from models.user import User
 
 
-@app_views.route('/status')
+@app_views.route('/status', methods=['GET'], strict_slashes=False)
 def get_status():
+    """ Returns a json object with a status ok message  """
     return jsonify({"status": "OK"})
 
 
-@app_views.route('/stats')
+@app_views.route('/stats', methods=['GET'], strict_slashes=False)
 def get_stats():
-    query = db_session.query(User)
-    user_count = len([elem for elem in query])
-    return jsonify({"users": user_count})
+    """ Returns a json object with a count of each object type  """
+    retval = {}
+    users = db_session.query(User)
+    return jsonify(len([x for x in users]))
