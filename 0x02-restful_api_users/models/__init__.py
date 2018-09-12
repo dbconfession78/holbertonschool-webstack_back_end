@@ -4,6 +4,11 @@ from sqlalchemy.orm import sessionmaker, scoped_session
 from models.base_model import Base
 from models.user import User
 import os
+
+from models.engine import db_storage
+storage = db_storage.DBStorage()
+
+"""
 user = os.getenv("HBNB_YELP_MYSQL_USER")
 pw = os.getenv("HBNB_YELP_MYSQL_PWD")
 host = os.getenv("HBNB_YELP_MYSQL_HOST")
@@ -20,3 +25,4 @@ if db_engine:
     Base.metadata.create_all(db_engine)
     db_session = scoped_session(sessionmaker(bind=db_engine,
                                              expire_on_commit=False))
+"""
