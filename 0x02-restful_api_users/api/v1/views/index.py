@@ -16,4 +16,4 @@ def get_stats():
     """ Returns a json object with a count of each object type  """
     retval = {}
     users = db_session.query(User)
-    return jsonify(len([x for x in users]))
+    return jsonify({"users": len([x for x in users])})
