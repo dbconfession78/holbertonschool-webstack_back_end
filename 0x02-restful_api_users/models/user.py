@@ -1,13 +1,12 @@
 #!/usr/bin/python3
+
 """
 Module: contains User class definition
 """
-import models
-from models.base_model import BaseModel, Base
 import hashlib
-import inspect
 from datetime import datetime
 from sqlalchemy import (Column, String)
+from models.base_model import BaseModel, Base
 
 
 class User(BaseModel, Base):

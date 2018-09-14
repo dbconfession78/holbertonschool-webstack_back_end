@@ -1,11 +1,9 @@
 #!/usr/bin/python3
-
 from models.base_model import Base
 from models.user import User
 import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
-
 
 user = os.getenv("HBNB_YELP_MYSQL_USER")
 pw = os.getenv("HBNB_YELP_MYSQL_PWD")
