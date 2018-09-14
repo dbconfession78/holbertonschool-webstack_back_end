@@ -1,6 +1,6 @@
 #!/usr/bin/python3
+
 from models.base_model import Base
-from models.engine import db_storage
 from models.user import User
 import os
 from sqlalchemy import create_engine
@@ -14,7 +14,7 @@ db = os.getenv("HBNB_YELP_MYSQL_DB")
 db_engine = None
 
 if db:
-    db_engine = create_engine('mysql+mysqldb://{}:{}@{}/{}'.format(user, pw,
+    db_engine = create_engine('mysql+pymysql://{}:{}@{}/{}'.format(user, pw,
                                                                    host, db))
 if os.getenv("HBNB_YELP_ENV") == "test":
     Base.metadata.drop_all(db_engine)
