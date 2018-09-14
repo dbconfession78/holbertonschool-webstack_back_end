@@ -6,7 +6,7 @@ host = "0.0.0.0"
 port = 5000
 
 
-@app.route('/c', strict_slashes = False)
+@app.route('/c', strict_slashes=False)
 def get_c_string():
     return "C is fun!"
 

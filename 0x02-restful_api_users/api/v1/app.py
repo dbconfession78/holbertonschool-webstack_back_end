@@ -4,6 +4,7 @@ from flask import (Flask, jsonify, make_response)
 from models import db_session
 from os import getenv
 
+
 app = Flask(__name__)
 app.url_map.strict_slashes = False
 host = getenv('HBNB_API_HOST')
@@ -31,6 +32,7 @@ def page_not_found(e):
 def close_db(error):
     """ Closes the databse at the end of the request """
     db_session.remove()
+
 
 if __name__ == "__main__":
     app.run(host=host, port=port)
