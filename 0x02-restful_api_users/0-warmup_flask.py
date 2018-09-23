@@ -2,12 +2,11 @@
 from flask import Flask
 
 app = Flask(__name__)
-app.url_map.strict_slashes = False
 host = '0.0.0.0'
 port = 5000
 
 
-@app.route('/')
+@app.route('/', strict_slashes=False)
 def fetch():
     return "Holberton School"
 
