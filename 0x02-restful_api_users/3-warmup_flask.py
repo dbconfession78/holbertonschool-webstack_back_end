@@ -8,12 +8,12 @@ from os import getenv
 app = Flask(__name__)
 host = getenv('HBNB_API_HOST')
 port = getenv('HBNB_API_PORT')
+app.url_map.strict_slashes = False
 
 
-@app.route('/hbtn')
+@app.route('/hbtn/', strict_slashes=False)
 def get_json():
     """ Returns jsonified response when route is called """
-    app.url_map.strict_slashes = False
     dictionary = {
         "C": "is fun",
         "Python": "is cool",
