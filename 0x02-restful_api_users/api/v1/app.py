@@ -1,4 +1,7 @@
 #!/usr/bin/python3
+"""
+app: the main app file for the api
+"""
 from api.v1.views import app_views
 from flask import (Flask, jsonify, make_response)
 from models import db_session
@@ -6,9 +9,6 @@ from os import getenv
 
 
 app = Flask(__name__)
-app.url_map.strict_slashes = False
-host = getenv('HBNB_API_HOST')
-port = getenv('HBNB_API_PORT')
 app.register_blueprint(app_views)
 
 
@@ -35,4 +35,6 @@ def close_db(error):
 
 
 if __name__ == "__main__":
+    host = getenv('HBNB_API_HOST')
+    port = int(getenv('HBNB_API_PORT'))
     app.run(host=host, port=port)
