@@ -9,14 +9,16 @@ from models import db_session
 # from datetime import datetime
 
 
-@app_views.route('/users', methods=['GET'], strict_slashes=False)
+@app_views.route('/users/', methods=['GET'], strict_slashes=False)
 def get_users():
-    """ Gets list of  all user dictionaries  """
-    user_dicts = []
-    all_users = get_users_dictionary()
-    for value in all_users.values():
-        user_dicts.append(value.to_dict())
-    return jsonify(user_dicts)
+    """ Returns all users in JSON format  """
+    users = [user.to_json() for user in all().values()]
+    return jsonify(users)
+    # user_dicts = []
+    # all_users = get_users_dictionary()
+    # for value in all_users.values():
+    #     user_dicts.append(value.to_dict())
+    # return jsonify(user_dicts)
 
 
 # @app_views.route('/users/<user_id>', methods=['PUT'], strict_slashes=False)
@@ -60,40 +62,40 @@ def get_users():
 #         return jsonify({}), 200
 
 
-@app_views.route('/users/',
-                 methods=['POST'],
-                 strict_slashes=False)
-def post():
-    if request.method == 'POST':
-        req_json = request.get_json()
+# @app_views.route('/users/',
+#                  methods=['POST'],
+#                  strict_slashes=False)
+# def post():
+#     if request.method == 'POST':
+#         req_json = request.get_json()
 
-        if not req_json:
-            abort(400, 'Wrong format')
+#         if not req_json:
+#             abort(400, 'Wrong format')
 
-        email = req_json.get("email")
-        password = req_json.get("password")
+#         email = req_json.get("email")
+#         password = req_json.get("password")
 
-        if not email:
-            abort(400, 'email missing')
-        if not password:
-            abort(400, 'password missing')
+#         if not email:
+#             abort(400, 'email missing')
+#         if not password:
+#             abort(400, 'password missing')
 
-        new_obj = User(**req_json)
-        db_session.add(new_obj)
-        db_session.commit()
-        del new_obj.__dict__['_password']
-        return jsonify(new_obj.to_json()), 201
+#         new_obj = User(**req_json)
+#         db_session.add(new_obj)
+#         db_session.commit()
+#         del new_obj.__dict__['_password']
+#         return jsonify(new_obj.to_json()), 201
 
 
-def get_users_dictionary():
-    """ returns a k/v dict of users refernced by user id """
-    users_dict = {}
-    user_objects = all()
+# def get_users_dictionary():
+#     """ returns a k/v dict of users refernced by user id """
+#     users_dict = {}
+#     user_objects = all()
 
-    for user_object in user_objects.values():
-        users_dict[user_object.id] = user_object
+#     for user_object in user_objects.values():
+#         users_dict[user_object.id] = user_object
 
-    return users_dict
+#     return users_dict
 
 
 def all():
