@@ -114,6 +114,11 @@ def post():
     db_session.add(new_obj)
     db_session.commit()
     del new_obj.__dict__['_password']
+    if 'first_name' not in new_obj.__dict__:
+        new_obj.__dict__['first_name'] = None
+    if 'last_name' not in new_obj.__dict__:
+        new_obj.__dict__['last_name'] = None
+
     return jsonify(new_obj.to_json()), 201
 
 
