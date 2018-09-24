@@ -16,9 +16,10 @@ def get_hbs_string():
     return "Holberton School"
 
 
-@app.route('/c', strict_slashes=False)
+@app.route('/c')
 def get_c_string():
     """ Return's 'C is fun!' when the route is called """
+    app.url_map.strict_slashes = False
     return "C is fun!"
 
 
