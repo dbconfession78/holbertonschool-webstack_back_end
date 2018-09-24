@@ -2,8 +2,8 @@
 """
 app: the main app file for the api
 """
+from flask import Flask, jsonify, make_response
 from api.v1.views import app_views
-from flask import (Flask, jsonify, make_response)
 from models import db_session
 from os import getenv
 
