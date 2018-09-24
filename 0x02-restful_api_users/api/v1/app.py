@@ -26,12 +26,13 @@ def page_not_found(e):
     """ Returns a json object with a 404 response message """
     return make_response(jsonify({'error': 'Not found'}), 404)
 
-# @app.errorhandler(400)
-# def page_not_found(e):
-#     """ Returns a json object with a 400 response message  """
-#     description = e.description
-#     message = {'error': description}
-#     return make_response(jsonify(message), 400)
+
+@app.errorhandler(400)
+def page_not_found(e):
+    """ Returns a json object with a 400 response message  """
+    description = e.description
+    message = {'error': description}
+    return make_response(jsonify(message), 400)
 
 
 if __name__ == "__main__":
