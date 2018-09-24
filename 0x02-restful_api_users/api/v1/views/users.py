@@ -103,6 +103,7 @@ def all():
     obj_dict = {}
     a_query = db_session.query(User)
     for obj in a_query:
+        del obj._password
         obj_ref = "{}.{}".format(type(obj).__name__, obj.id)
         obj_dict[obj_ref] = obj
     return obj_dict
