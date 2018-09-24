@@ -14,11 +14,6 @@ def get_users():
     """ Returns all users in JSON format  """
     users = [user.to_json() for user in all().values()]
     return jsonify(users)
-    # user_dicts = []
-    # all_users = get_users_dictionary()
-    # for value in all_users.values():
-    #     user_dicts.append(value.to_dict())
-    # return jsonify(user_dicts)
 
 
 # @app_views.route('/users/<user_id>', methods=['PUT'], strict_slashes=False)
@@ -41,6 +36,20 @@ def get_users():
 #     db_session.commit()
 #     del user_obj.__dict__['_password']
 #     return jsonify(user_obj.to_json()), 200
+
+
+@app_views.route('/users/<user_id>',
+                 methods=['GET'],
+                 strict_slashes=False)
+def get_single_user(user_id):
+    """ returns a user object in JSON format """
+    try:
+        all_obj = all()
+        _id = "User.{}".format(user_id)
+        user = all_obj.get(_id)
+    except:
+        abort(404)
+    return jsonify(user.to_json())
 
 
 # @app_views.route('/users/<user_id>',
