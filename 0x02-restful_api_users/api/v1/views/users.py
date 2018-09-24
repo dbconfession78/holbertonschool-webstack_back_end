@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 from api.v1.views import app_views
 from flask import (jsonify, abort, request)
 from models.user import User
@@ -15,70 +16,70 @@ def get_users():
     return jsonify(user_dicts)
 
 
-@app_views.route('/users/<user_id>', methods=['PUT'], strict_slashes=False)
-def update(user_id):
-    all_users = get_users_dictionary()
-    if user_id not in all_users:
-        abort(404, 'Not found')
+# @app_views.route('/users/<user_id>', methods=['PUT'], strict_slashes=False)
+# def update(user_id):
+#     all_users = get_users_dictionary()
+#     if user_id not in all_users:
+#         abort(404, 'Not found')
 
-    request_body = request.get_json()
-    if not request_body:
-        return jsonify({"error": "Wrong format"})
+#     request_body = request.get_json()
+#     if not request_body:
+#         return jsonify({"error": "Wrong format"})
 
-    user_obj = all_users.get(user_id)
-    for k, v in request_body.items():
-        if k in ('first_name', 'last_name'):
-            user_obj.__setattr__(k, request_body.get(k))
-    user_obj.updated_at = datetime.utcnow()
+#     user_obj = all_users.get(user_id)
+#     for k, v in request_body.items():
+#         if k in ('first_name', 'last_name'):
+#             user_obj.__setattr__(k, request_body.get(k))
+#     user_obj.updated_at = datetime.utcnow()
 
-    db_session.add(user_obj)
-    db_session.commit()
-    del user_obj.__dict__['_password']
-    return jsonify(user_obj.to_json()), 200
-
-
-@app_views.route('/users/<user_id>',
-                 methods=['GET', 'DELETE'], strict_slashes=False)
-def get_user(user_id):
-    """ Gets dictionary representation of single user """
-    all_users = get_users_dictionary()
-    user_obj = all_users.get(user_id)
-
-    if not user_obj:
-        abort(404, 'Not found')
-
-    if request.method == 'GET':
-        return jsonify(user_obj.to_dict())
-
-    if request.method == 'DELETE':
-        db_session.delete(user_obj)
-        db_session.commit()
-        return jsonify({}), 200
+#     db_session.add(user_obj)
+#     db_session.commit()
+#     del user_obj.__dict__['_password']
+#     return jsonify(user_obj.to_json()), 200
 
 
-@app_views.route('/users/',
-                 methods=['POST'],
-                 strict_slashes=False)
-def post():
-    if request.method == 'POST':
-        req_json = request.get_json()
+# @app_views.route('/users/<user_id>',
+#                  methods=['GET', 'DELETE'], strict_slashes=False)
+# def get_user(user_id):
+#     """ Gets dictionary representation of single user """
+#     all_users = get_users_dictionary()
+#     user_obj = all_users.get(user_id)
 
-        if not req_json:
-            abort(400, 'Wrong format')
+#     if not user_obj:
+#         abort(404, 'Not found')
 
-        email = req_json.get("email")
-        password = req_json.get("password")
+#     if request.method == 'GET':
+#         return jsonify(user_obj.to_dict())
 
-        if not email:
-            abort(400, 'email missing')
-        if not password:
-            abort(400, 'password missing')
+#     if request.method == 'DELETE':
+#         db_session.delete(user_obj)
+#         db_session.commit()
+#         return jsonify({}), 200
 
-        new_obj = User(**req_json)
-        db_session.add(new_obj)
-        db_session.commit()
-        del new_obj.__dict__['_password']
-        return jsonify(new_obj.to_json()), 201
+
+# @app_views.route('/users/',
+#                  methods=['POST'],
+#                  strict_slashes=False)
+# def post():
+#     if request.method == 'POST':
+#         req_json = request.get_json()
+
+#         if not req_json:
+#             abort(400, 'Wrong format')
+
+#         email = req_json.get("email")
+#         password = req_json.get("password")
+
+#         if not email:
+#             abort(400, 'email missing')
+#         if not password:
+#             abort(400, 'password missing')
+
+#         new_obj = User(**req_json)
+#         db_session.add(new_obj)
+#         db_session.commit()
+#         del new_obj.__dict__['_password']
+#         return jsonify(new_obj.to_json()), 201
 
 
 def get_users_dictionary():
