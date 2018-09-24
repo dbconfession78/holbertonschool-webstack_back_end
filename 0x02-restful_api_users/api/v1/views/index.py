@@ -1,11 +1,11 @@
 #!/usr/bin/python3
 """
-index: contains the status and stats route for api
+Module: index - contains the status and stats route for api
 """
 from api.v1.views import app_views
-from flask import jsonify
-from models import db_session
-from models.user import User
+# from flask import jsonify
+# from models import db_session
+# from models.user import User
 
 
 @app_views.route('/status', methods=['GET'], strict_slashes=False)
@@ -14,9 +14,9 @@ def get_status():
     return jsonify({"status": "OK"})
 
 
-@app_views.route('/stats', methods=['GET'], strict_slashes=False)
-def get_stats():
-    """ Returns a json object with a count of each object type  """
-    retval = {}
-    users = db_session.query(User)
-    return jsonify({"users": len([x for x in users])})
+# @app_views.route('/stats', methods=['GET'], strict_slashes=False)
+# def get_stats():
+#     """ Returns a json object with a count of each object type  """
+#     retval = {}
+#     users = db_session.query(User)
+#     return jsonify({"users": len([x for x in users])})
