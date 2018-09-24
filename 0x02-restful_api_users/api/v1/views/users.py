@@ -113,7 +113,7 @@ def delete_user(user_id):
                  methods=['POST'],
                  strict_slashes=False)
 def post():
-""" Adds a user record """
+    """ Adds a user record """
     req_json = request.get_json()
 
     if not req_json:
