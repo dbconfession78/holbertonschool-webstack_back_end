@@ -19,26 +19,27 @@ def get_users():
     return jsonify(users)
 
 
-# @app_views.route('/users/<user_id>', methods=['PUT'], strict_slashes=False)
-# def update(user_id):
-#     all_users = get_users_dictionary()
-#     if user_id not in all_users:
-#         abort(404, 'Not found')
+@app_views.route('/users/<user_id>', methods=['PUT'], strict_slashes=False)
+def update(user_id):
+    """ Updates a user record """
+    all_users = get_users_dictionary()
+    if user_id not in all_users:
+        abort(404, 'Not found')
 
-#     request_body = request.get_json()
-#     if not request_body:
-#         return jsonify({"error": "Wrong format"})
+    request_body = request.get_json()
+    if not request_body:
+        return jsonify({"error": "Wrong format"})
 
-#     user_obj = all_users.get(user_id)
-#     for k, v in request_body.items():
-#         if k in ('first_name', 'last_name'):
-#             user_obj.__setattr__(k, request_body.get(k))
-#     user_obj.updated_at = datetime.utcnow()
+    user_obj = all_users.get(user_id)
+    for k, v in request_body.items():
+        if k in ('first_name', 'last_name'):
+            user_obj.__setattr__(k, request_body.get(k))
+    user_obj.updated_at = datetime.utcnow()
 
-#     db_session.add(user_obj)
-#     db_session.commit()
-#     del user_obj.__dict__['_password']
-#     return jsonify(user_obj.to_json()), 200
+    db_session.add(user_obj)
+    db_session.commit()
+    del user_obj.__dict__['_password']
+    return jsonify(user_obj.to_json()), 200
 
 
 @app_views.route('/users/<user_id>',
