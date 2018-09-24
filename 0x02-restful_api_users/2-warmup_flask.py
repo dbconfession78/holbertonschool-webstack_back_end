@@ -7,16 +7,16 @@ from flask import Flask
 app = Flask(__name__)
 host = '0.0.0.0'
 port = 5000
-app.url_map.strict_slashes = False
 
 
 @app.route('/')
 def get_hbs_string():
     """ Returns 'Holberton School' when the route is called """
+    app.url_map.strict_slashes = False
     return "Holberton School"
 
 
-@app.route('/c')
+@app.route('/c', strict_slashes=False)
 def get_c_string():
     """ Return's 'C is fun!' when the route is called """
     return "C is fun!"
