@@ -6,14 +6,12 @@ from flask import (Flask, jsonify)
 from os import getenv
 
 app = Flask(__name__)
-host = getenv('HBNB_API_HOST')
-port = int(getenv('HBNB_API_PORT'))
-app.url_map.strict_slashes = False
 
 
 @app.route('/hbtn', strict_slashes=False)
 def get_json():
     """ Returns jsonified response when route is called """
+    app.url_map.strict_slashes = False
     dictionary = {
         "C": "is fun",
         "Python": "is cool",
@@ -22,4 +20,6 @@ def get_json():
     return jsonify(dictionary)
 
 if __name__ == "__main__":
+    host = getenv('HBNB_API_HOST')
+    port = int(getenv('HBNB_API_PORT'))
     app.run(host=host, port=port)
