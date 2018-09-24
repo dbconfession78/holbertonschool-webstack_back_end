@@ -57,6 +57,22 @@ def get_single_user(user_id):
         abort(404)
 
 
+@app_views.route('/users/delete_all',
+                 methods=['GET'],
+                 strict_slashes=False)
+def delete_all_users():
+    """ Deletes all user records """
+    all_obj = all()
+    try:
+        for k, v in all_obj.items():
+            user = all_obj.get(k)
+            db_session.delete(user)
+        db_session.commit()
+    except:
+        raise Exception("couldn't delete 1 or more user records, rolling back")
+    return jsonify({}), 200
+
+
 @app_views.route('/users/<user_id>',
                  methods=['DELETE'],
                  strict_slashes=False)
