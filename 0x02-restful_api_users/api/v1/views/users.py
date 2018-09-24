@@ -47,9 +47,9 @@ def get_single_user(user_id):
         all_obj = all()
         _id = "User.{}".format(user_id)
         user = all_obj.get(_id)
+        return jsonify(user.to_json())
     except:
         abort(404)
-    return jsonify(user.to_json())
 
 
 # @app_views.route('/users/<user_id>',
