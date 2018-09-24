@@ -12,12 +12,14 @@ app.url_map.strict_slashes = False
 
 @app.route('/')
 def get_hbs_string():
+    """ Returns 'Holberton School' when the route is called """
     return "Holberton School"
 
 
 @app.route('/c')
 def get_c_string():
-    return "C is fun"
+    """ Return's 'C is fun!' when the route is called """
+    return "C is fun!"
 
 
 if __name__ == "__main__":
