@@ -3,7 +3,7 @@
 Module: index - contains the status and stats route for api
 """
 from api.v1.views import app_views
-# from flask import jsonify
+from flask import jsonify
 # from models import db_session
 # from models.user import User
 
