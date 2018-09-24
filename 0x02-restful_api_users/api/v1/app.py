@@ -22,12 +22,10 @@ app.register_blueprint(app_views)
 #     return make_response(jsonify(message), 400)
 
 
-# @app.errorhandler(404)
-# def page_not_found(e):
-#     """ Returns a json object with a 404 response message """
-#     description = e.description
-#     message = {'error': description}
-#     return make_response(jsonify(message), 404)
+@app.errorhandler(404)
+def page_not_found(e):
+    """ Returns a json object with a 404 response message """
+    return make_response(jsonify({'error': 'Not found'}), 404)
 
 # @app.teardown_appcontext
 # def close_db(error):
