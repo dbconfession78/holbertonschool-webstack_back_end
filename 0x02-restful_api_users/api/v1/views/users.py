@@ -109,10 +109,11 @@ def delete_user(user_id):
 #         return jsonify({}), 200
 
 
-@app_views.route('/users/',
+@app_views.route('/users',
                  methods=['POST'],
                  strict_slashes=False)
 def post():
+""" Adds a user record """
     req_json = request.get_json()
 
     if not req_json:
