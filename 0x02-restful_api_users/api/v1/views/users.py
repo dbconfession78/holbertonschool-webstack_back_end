@@ -12,7 +12,10 @@ from models import db_session
 @app_views.route('/users/', methods=['GET'], strict_slashes=False)
 def get_users():
     """ Returns all users in JSON format  """
-    users = [user.to_json() for user in all().values()]
+    users = []
+    for user in all().values():
+        del user._password
+        users.append(user.to_json())
     return jsonify(users)
 
 
@@ -42,12 +45,31 @@ def get_users():
                  methods=['GET'],
                  strict_slashes=False)
 def get_single_user(user_id):
-    """ returns a user object in JSON format """
+    """ Returns a user object in JSON format """
     try:
         all_obj = all()
         _id = "User.{}".format(user_id)
         user = all_obj.get(_id)
+
+        del user._password
         return jsonify(user.to_json())
+    except:
+        abort(404)
+
+
+@app_views.route('/users/<user_id>',
+                 methods=['DELETE'],
+                 strict_slashes=False)
+def delete_user(user_id):
+    """ Deletes a single user record """
+    try:
+        all_obj = all()
+        _id = "User.{}".format(user_id)
+        user = all_obj.get(_id)
+
+        db_session.delete(user)
+        db_session.commit()
+        return jsonify({}), 200
     except:
         abort(404)
 
@@ -112,7 +134,6 @@ def all():
     obj_dict = {}
     a_query = db_session.query(User)
     for obj in a_query:
-        del obj._password
         obj_ref = "{}.{}".format(type(obj).__name__, obj.id)
         obj_dict[obj_ref] = obj
     return obj_dict
