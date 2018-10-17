@@ -6,6 +6,15 @@ import base64
 
 class BasicAuth(Auth):
     """ 'BasicAuth' class """
+    def extract_user_credentials(self, decoded_base64_authorization_header):
+        """ Returns user email and password from the Base64 decoded value """
+        auth = decoded_base64_authorization_header
+        if auth is None or type(auth) != str or ':' not in auth:
+            return (None, None)
+
+        creds = auth.split(':')
+        return (creds[0], creds[1])
+
     def extract_base64_authorization_header(self, authorization_header):
         """ Returns the Base64 part of the 'Authorization' header """
         auth = authorization_header
