@@ -6,7 +6,7 @@ from api.v1.views import app_views
 from flask import (jsonify, abort, request)
 from models.user import User
 from models import db_session
-# from datetime import datetime
+from datetime import datetime
 
 
 @app_views.route('/users/', methods=['GET'], strict_slashes=False)
@@ -19,26 +19,50 @@ def get_users():
     return jsonify(users)
 
 
-# @app_views.route('/users/<user_id>', methods=['PUT'], strict_slashes=False)
-# def update(user_id):
-#     all_users = get_users_dictionary()
-#     if user_id not in all_users:
-#         abort(404, 'Not found')
+@app_views.route('/users/<user_id>', methods=['PUT'], strict_slashes=False)
+def update(user_id):
+    """ Updates a user record """
+    if user_id is None:
+        abort(404)
 
-#     request_body = request.get_json()
-#     if not request_body:
-#         return jsonify({"error": "Wrong format"})
+    all_obj = all()
+    _id = "User.{}".format(user_id)
+    user = all_obj.get(_id)
+    if user is None:
+        abort(404)
 
-#     user_obj = all_users.get(user_id)
-#     for k, v in request_body.items():
-#         if k in ('first_name', 'last_name'):
-#             user_obj.__setattr__(k, request_body.get(k))
-#     user_obj.updated_at = datetime.utcnow()
+    try:
+        request_body = request.get_json()
+    except:
+        request_body = None
 
-#     db_session.add(user_obj)
-#     db_session.commit()
-#     del user_obj.__dict__['_password']
-#     return jsonify(user_obj.to_json()), 200
+    if request_body is None:
+        return jsonify({"error": "Wrong format"})
+
+    for item in ("id", "created_at", "updated_at", "email"):
+        request_body.pop(item, None)
+    for k, v in request_body.items():
+        setattr(user, k, v)
+    db_session.add(user)
+    db_session.commit()
+    if '_password' in user.__dict__:
+        del user.__dict__['_password']
+    return jsonify(user.to_json()), 200
+
+    # request_body = request.get_json()
+    # if not request_body:
+    #     return jsonify({"error": "Wrong format"})
+
+    # user_obj = all_obj.get("User.{}".format(user_id))
+    # for k, v in request_body.items():
+    #     if k in ('first_name', 'last_name'):
+    #         user_obj.__setattr__(k, request_body.get(k))
+    # user_obj.updated_at = datetime.utcnow()
+
+    # db_session.add(user_obj)
+    # db_session.commit()
+    # del user_obj.__dict__['_password']
+    # return jsonify(user_obj.to_json()), 200
 
 
 @app_views.route('/users/<user_id>',
@@ -55,6 +79,22 @@ def get_single_user(user_id):
         return jsonify(user.to_json())
     except:
         abort(404)
+
+
+@app_views.route('/users/delete_all',
+                 methods=['GET'],
+                 strict_slashes=False)
+def delete_all_users():
+    """ Deletes all user records """
+    all_obj = all()
+    try:
+        for k, v in all_obj.items():
+            user = all_obj.get(k)
+            db_session.delete(user)
+        db_session.commit()
+    except:
+        raise Exception("couldn't delete 1 or more user records, rolling back")
+    return jsonify({}), 200
 
 
 @app_views.route('/users/<user_id>',
@@ -93,10 +133,11 @@ def delete_user(user_id):
 #         return jsonify({}), 200
 
 
-@app_views.route('/users/',
+@app_views.route('/users',
                  methods=['POST'],
                  strict_slashes=False)
 def post():
+    """ Adds a user record """
     req_json = request.get_json()
 
     if not req_json:
