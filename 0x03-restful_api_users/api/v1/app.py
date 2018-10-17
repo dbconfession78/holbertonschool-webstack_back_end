@@ -3,6 +3,7 @@
 app: api app file
 """
 from api.v1.auth.auth import Auth
+from api.v1.auth.basic_auth import BasicAuth
 from flask import Flask, make_response, jsonify, request, abort
 from api.v1.views import app_views
 from models import db_session
@@ -10,7 +11,7 @@ from os import getenv
 
 
 app = Flask(__name__)
-auth = Auth()
+auth = BasicAuth() if getenv('HBNB_YELP_AUTH') == 'basic_auth' else Auth()
 app.register_blueprint(app_views)
 # CORS(app, resources={r"/*": {"origins": "0.0.0.0"}}) # <--
 
