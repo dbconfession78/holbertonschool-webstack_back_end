@@ -57,6 +57,21 @@ def get_single_user(user_id):
         abort(404)
 
 
+@app_views.route('/users_delete',
+                 methods=['DELETE'],
+                 strict_slashes=False)
+def delete_all_users():
+    """ Deletes all user record """
+    try:
+        users = all()
+        for user in users.values():
+            db_session.delete(user)
+        db_session.commit()
+        return jsonify({}), 200
+    except:
+        abort(404)
+    
+
 @app_views.route('/users/<user_id>',
                  methods=['DELETE'],
                  strict_slashes=False)

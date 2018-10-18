@@ -48,17 +48,17 @@ def page_not_found(e):
     return make_response(jsonify(message), 400)
 
 
-@app.before_request
-def before_request():
-    """ Handles authorization before request"""
-    _list = ['/api/v1/status/', '/api/v1/unauthorized/', '/api/v1/forbidden/']
-    if not auth.require_auth(request.path, _list):
-        return
+# @app.before_request
+# def before_request():
+#     """ Handles authorization before request"""
+#     _list = ['/api/v1/status/', '/api/v1/unauthorized/', '/api/v1/forbidden/']
+#     if not auth.require_auth(request.path, _list):
+#         return
 
-    if auth.authorization_header(request) is None:
-        abort(401)
-    if auth.current_user() is None:
-        abort(403)
+#     if auth.authorization_header(request) is None:
+#         abort(401)
+#     if auth.current_user() is None:
+#         abort(403)
 
 if __name__ == "__main__":
     _host = getenv('HBNB_API_HOST', '0.0.0.0')

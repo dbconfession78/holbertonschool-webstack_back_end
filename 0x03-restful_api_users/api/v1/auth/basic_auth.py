@@ -1,11 +1,32 @@
 #!/usr/bin/python3
 """ basic_auth: contains the 'BasicAuth' class """
 from api.v1.auth.auth import Auth
+from api.v1.views import users
 import base64
+import models
+from models import db_session
 
 
 class BasicAuth(Auth):
     """ 'BasicAuth' class """
+
+    def user_object_from_credentials(self, user_email, user_pwd):
+        """ Returns the user object based on 'user_email' and 'user_pwd' """
+
+        _all = users.all()
+        for k, v in _all.items():
+            if v.email == user_email:
+                return v
+
+        if not user_email or type(user_email) != str:
+            return None
+
+        if not user_pwd or type(user_pwd) != str:
+            return None
+
+
+        
+
     def extract_user_credentials(self, decoded_base64_authorization_header):
         """ Returns user email and password from the Base64 decoded value """
         auth = decoded_base64_authorization_header
