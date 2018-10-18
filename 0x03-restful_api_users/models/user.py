@@ -3,10 +3,10 @@
 """
 Module: contains User class definition
 """
-import hashlib
 from datetime import datetime
-from sqlalchemy import (Column, String)
+import hashlib
 from models.base_model import BaseModel, Base
+from sqlalchemy import (Column, String)
 
 
 class User(BaseModel, Base):

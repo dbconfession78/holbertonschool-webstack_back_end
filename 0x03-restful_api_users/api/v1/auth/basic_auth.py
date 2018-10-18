@@ -3,8 +3,7 @@
 from api.v1.auth.auth import Auth
 from api.v1.views import users
 import base64
-import models
-from models import db_session
+import hashlib
 
 
 class BasicAuth(Auth):
@@ -12,20 +11,20 @@ class BasicAuth(Auth):
 
     def user_object_from_credentials(self, user_email, user_pwd):
         """ Returns the user object based on 'user_email' and 'user_pwd' """
-
-        _all = users.all()
-        for k, v in _all.items():
-            if v.email == user_email:
-                return v
-
         if not user_email or type(user_email) != str:
             return None
 
         if not user_pwd or type(user_pwd) != str:
             return None
 
+        users_dict = users.all()
+        hashed_user_pwd = get_md5_hash(user_pwd)
 
-        
+        for user in users_dict.values():
+            if user.email == user_email:
+                if user.password == hashed_user_pwd:
+                    return user
+        return None
 
     def extract_user_credentials(self, decoded_base64_authorization_header):
         """ Returns user email and password from the Base64 decoded value """
@@ -64,3 +63,9 @@ def is_valid_base64_string(s):
         return True
     except Exception:
         return False
+
+
+def get_md5_hash(string):
+    """ Returns string hashed with md5 algorithm """
+    b = bytes(string.encode("utf-8"))
+    return hashlib.md5(b).hexdigest()
