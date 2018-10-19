@@ -9,6 +9,11 @@ import hashlib
 class BasicAuth(Auth):
     """ 'BasicAuth' class """
 
+    def current_user(self, request=None):
+        """ Retrives user instance for a request """
+        # TODO
+        pass
+
     def user_object_from_credentials(self, user_email, user_pwd):
         """ Returns the user object based on 'user_email' and 'user_pwd' """
         if not user_email or type(user_email) != str:
@@ -18,12 +23,11 @@ class BasicAuth(Auth):
             return None
 
         users_dict = users.all()
-        hashed_user_pwd = get_md5_hash(user_pwd)
-
         for user in users_dict.values():
             if user.email == user_email:
-                if user.password == hashed_user_pwd:
+                if user.is_valid_password(user_pwd):
                     return user
+                break
         return None
 
     def extract_user_credentials(self, decoded_base64_authorization_header):
