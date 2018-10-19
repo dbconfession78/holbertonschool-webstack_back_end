@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """ basic_auth: contains the 'BasicAuth' class """
 from api.v1.auth.auth import Auth
-from api.v1.views import users
+from models import (db_session, User)
 import base64
 import hashlib
 
@@ -22,12 +22,11 @@ class BasicAuth(Auth):
         if not user_pwd or type(user_pwd) != str:
             return None
 
-        users_dict = users.all()
-        for user in users_dict.values():
-            if user.email == user_email:
-                if user.is_valid_password(user_pwd):
-                    return user
-                break
+        query = db_session.query(User).filter(User.email == user_email)
+        if query.count() == 1:
+            user = query.one()
+            if user.is_valid_password(user_pwd):
+                return user
         return None
 
     def extract_user_credentials(self, decoded_base64_authorization_header):
