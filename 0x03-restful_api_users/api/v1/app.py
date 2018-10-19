@@ -50,13 +50,16 @@ def page_not_found(e):
 @app.before_request
 def before_request():
     """ Handles authorization before request"""
-    _list = ['/api/v1/status/', '/api/v1/unauthorized/', '/api/v1/forbidden/']
-    if not auth.require_auth(request.path, _list):
+    excluded_paths = ['/api/v1/status/',
+                      '/api/v1/unauthorized/',
+                      '/api/v1/forbidden/']
+
+    if not auth.require_auth(request.path, excluded_paths):
         return
 
-    if auth.authorization_header(request) is None:
+    if not auth.authorization_header(request):
         abort(401)
-    if auth.current_user() is None:
+    if auth.current_user(request) is None:
         abort(403)
 
 

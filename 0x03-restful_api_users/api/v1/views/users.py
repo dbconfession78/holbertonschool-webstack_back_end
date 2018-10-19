@@ -6,7 +6,6 @@ from api.v1.views import app_views
 from flask import (jsonify, abort, request)
 from models.user import User
 from models import db_session
-# from datetime import datetime
 
 
 @app_views.route('/users/', methods=['GET'], strict_slashes=False)
@@ -19,31 +18,7 @@ def get_users():
     return jsonify(users)
 
 
-# @app_views.route('/users/<user_id>', methods=['PUT'], strict_slashes=False)
-# def update(user_id):
-#     all_users = get_users_dictionary()
-#     if user_id not in all_users:
-#         abort(404, 'Not found')
-
-#     request_body = request.get_json()
-#     if not request_body:
-#         return jsonify({"error": "Wrong format"})
-
-#     user_obj = all_users.get(user_id)
-#     for k, v in request_body.items():
-#         if k in ('first_name', 'last_name'):
-#             user_obj.__setattr__(k, request_body.get(k))
-#     user_obj.updated_at = datetime.utcnow()
-
-#     db_session.add(user_obj)
-#     db_session.commit()
-#     del user_obj.__dict__['_password']
-#     return jsonify(user_obj.to_json()), 200
-
-
-@app_views.route('/users/<user_id>',
-                 methods=['GET'],
-                 strict_slashes=False)
+@app_views.route('/users/<user_id>', methods=['GET'], strict_slashes=False)
 def get_single_user(user_id):
     """ Returns a user object in JSON format """
     try:
@@ -53,28 +28,24 @@ def get_single_user(user_id):
 
         del user._password
         return jsonify(user.to_json())
-    except:
+    except Exception:
         abort(404)
 
 
-@app_views.route('/users_delete',
-                 methods=['DELETE'],
-                 strict_slashes=False)
+@app_views.route('/users_delete', methods=['DELETE'], strict_slashes=False)
 def delete_all_users():
-    """ Deletes all user record """
+    """ Deletes all user records """
     try:
         users = all()
         for user in users.values():
             db_session.delete(user)
         db_session.commit()
         return jsonify({}), 200
-    except:
+    except Exception:
         abort(404)
-    
 
-@app_views.route('/users/<user_id>',
-                 methods=['DELETE'],
-                 strict_slashes=False)
+
+@app_views.route('/users/<user_id>', methods=['DELETE'], strict_slashes=False)
 def delete_user(user_id):
     """ Deletes a single user record """
     try:
@@ -85,32 +56,11 @@ def delete_user(user_id):
         db_session.delete(user)
         db_session.commit()
         return jsonify({}), 200
-    except:
+    except Exception:
         abort(404)
 
 
-# @app_views.route('/users/<user_id>',
-#                  methods=['GET', 'DELETE'], strict_slashes=False)
-# def get_user(user_id):
-#     """ Gets dictionary representation of single user """
-#     all_users = get_users_dictionary()
-#     user_obj = all_users.get(user_id)
-
-#     if not user_obj:
-#         abort(404, 'Not found')
-
-#     if request.method == 'GET':
-#         return jsonify(user_obj.to_dict())
-
-#     if request.method == 'DELETE':
-#         db_session.delete(user_obj)
-#         db_session.commit()
-#         return jsonify({}), 200
-
-
-@app_views.route('/users/',
-                 methods=['POST'],
-                 strict_slashes=False)
+@app_views.route('/users/', methods=['POST'], strict_slashes=False)
 def post():
     req_json = request.get_json()
 
@@ -126,6 +76,9 @@ def post():
         abort(400, 'password missing')
 
     new_obj = User(**req_json)
+    if email_exists(email):
+        abort(400, 'email already exists')
+
     db_session.add(new_obj)
     db_session.commit()
     del new_obj.__dict__['_password']
@@ -137,15 +90,10 @@ def post():
     return jsonify(new_obj.to_json()), 201
 
 
-# def get_users_dictionary():
-#     """ returns a k/v dict of users refernced by user id """
-#     users_dict = {}
-#     user_objects = all()
-
-#     for user_object in user_objects.values():
-#         users_dict[user_object.id] = user_object
-
-#     return users_dict
+def email_exists(email):
+    """  Returns True if the email exists in the database """
+    q = db_session.query(User).filter(User.email == email)
+    return q.count() != 0
 
 
 def all():

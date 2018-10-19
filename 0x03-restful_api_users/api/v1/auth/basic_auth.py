@@ -3,7 +3,6 @@
 from api.v1.auth.auth import Auth
 from models import (db_session, User)
 import base64
-import hashlib
 
 
 class BasicAuth(Auth):
@@ -11,10 +10,18 @@ class BasicAuth(Auth):
 
     def current_user(self, request=None):
         """ Retrives user instance for a request """
-        # TODO
-        pass
+        if request:
+            token = self.authorization_header(request)
+            token = self.extract_base64_authorization_header(token)
+            token = self.decode_base64_authorization_header(token)
+            creds = self.extract_user_credentials(token)
+            email = creds[0]
+            password = creds[1]
+            user_obj = self.user_object_from_credentials(email, password)
+            return user_obj
 
-    def user_object_from_credentials(self, user_email, user_pwd):
+    @staticmethod
+    def user_object_from_credentials(user_email, user_pwd):
         """ Returns the user object based on 'user_email' and 'user_pwd' """
         if not user_email or type(user_email) != str:
             return None
@@ -23,22 +30,27 @@ class BasicAuth(Auth):
             return None
 
         query = db_session.query(User).filter(User.email == user_email)
-        if query.count() == 1:
+        count = query.count()
+        if count == 1:
             user = query.one()
             if user.is_valid_password(user_pwd):
                 return user
+        if count > 1:
+            raise Exception("ERROR: duplicate emails found in database")
         return None
 
-    def extract_user_credentials(self, decoded_base64_authorization_header):
+    @staticmethod
+    def extract_user_credentials(decoded_base64_authorization_header):
         """ Returns user email and password from the Base64 decoded value """
         auth = decoded_base64_authorization_header
         if auth is None or type(auth) != str or ':' not in auth:
-            return (None, None)
+            return None, None
 
         creds = auth.split(':')
-        return (creds[0], creds[1])
+        return creds[0], creds[1]
 
-    def extract_base64_authorization_header(self, authorization_header):
+    @staticmethod
+    def extract_base64_authorization_header(authorization_header):
         """ Returns the Base64 part of the 'Authorization' header """
         auth = authorization_header
         if auth is None or type(auth) != str or "Basic" not in auth:
@@ -47,7 +59,8 @@ class BasicAuth(Auth):
         index = authorization_header.index('Basic')
         return authorization_header[index+6:]
 
-    def decode_base64_authorization_header(self, base64_authorization_header):
+    @staticmethod
+    def decode_base64_authorization_header(base64_authorization_header):
         """ Returns decoded value of UTF8 string """
         auth = base64_authorization_header
 
@@ -66,9 +79,3 @@ def is_valid_base64_string(s):
         return True
     except Exception:
         return False
-
-
-def get_md5_hash(string):
-    """ Returns string hashed with md5 algorithm """
-    b = bytes(string.encode("utf-8"))
-    return hashlib.md5(b).hexdigest()

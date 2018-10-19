@@ -18,11 +18,11 @@ class Auth:
         return True
 
     def authorization_header(self, request=None):
-        """ Returns None  """
+        """ Gets value of request's 'Authorization' header  """
         if request is None:
             return None
+
         headers = request.headers
-#        input('headers: {}'.format(headers))
         if "Authorization" not in headers.keys():
             return None
         return headers['Authorization']
