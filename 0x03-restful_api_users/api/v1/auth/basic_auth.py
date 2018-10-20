@@ -46,8 +46,10 @@ class BasicAuth(Auth):
         if auth is None or type(auth) != str or ':' not in auth:
             return None, None
 
-        creds = auth.split(':')
-        return creds[0], creds[1]
+        index = auth.index(":")
+        email = auth[:index]
+        password = auth[index+1:]
+        return email, password
 
     @staticmethod
     def extract_base64_authorization_header(authorization_header):
@@ -67,15 +69,7 @@ class BasicAuth(Auth):
         if auth is None or type(auth) != str:
             return None
 
-        if is_valid_base64_string(auth):
+        try:
             return base64.b64decode(auth).decode('utf-8')
-        return None
-
-
-def is_valid_base64_string(s):
-    """ Returns True if 's' is a valid base64 string """
-    try:
-        base64.b64encode(base64.b64decode(s))
-        return True
-    except Exception:
-        return False
+        except Exception:
+            return None

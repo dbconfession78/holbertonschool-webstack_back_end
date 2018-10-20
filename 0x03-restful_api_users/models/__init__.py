@@ -12,11 +12,11 @@ db = os.getenv("HBNB_YELP_MYSQL_DB")
 db_engine = None
 
 if db:
-#    db_engine = create_engine('mysql+pymysql://{}:{}@{}/{}'.format(user, pw,
-#                                                                   host, db))
+   # db_engine = create_engine('mysql+pymysql://{}:{}@{}/{}'.format(user, pw,
+   #                                                                host, db))
 
-    db_engine = create_engine('mysql+mysqldb://{}:{}@{}/{}'.format(user, pw,
-                                                                   host, db))
+   db_engine = create_engine('mysql+mysqldb://{}:{}@{}/{}'.format(user, pw,
+                                                                  host, db))
 if os.getenv("HBNB_YELP_ENV") == "test":
     Base.metadata.drop_all(db_engine)
 
